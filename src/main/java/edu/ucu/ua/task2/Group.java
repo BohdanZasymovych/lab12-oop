@@ -17,10 +17,18 @@ public class Group<T> extends Task<T> {
         return this;
     }
 
+    public List<Task<T>> getTasks() {
+        return tasks;
+    }
+
     @Override
     public void freeze() {
         super.freeze();
         groupUuid = UUID.randomUUID().toString();
+        
+        StampingVisitor<T> visitor = new StampingVisitor<>("group_uuid", groupUuid);
+        accept(visitor);
+
         for (Task<T> task: tasks) {
             task.freeze();
         }
@@ -33,5 +41,10 @@ public class Group<T> extends Task<T> {
         for (Task<T> task: tasks) {
             task.apply(arg);
         }
+    }
+
+    @Override
+    public void accept(StampingVisitor<T> visitor) {
+        visitor.visitGroup(this);
     }
 }

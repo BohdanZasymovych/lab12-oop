@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class Task<T> {
+public abstract class Task<T> implements Stampable<T> {
     private String id;
     private Map<String, String> headers;
 
@@ -26,6 +26,9 @@ public abstract class Task<T> {
     }
 
     public String getHeader(String header) {
+        if (headers == null) {
+            return null;
+        }
         return headers.get(header);
     }
 }
